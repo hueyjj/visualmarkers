@@ -131,8 +131,7 @@ endfunction
 
 function! visualmarkers#MarkBuffer()
     silent! call visualmarkers#UnHlMarkBuffer()
-    "normal! ml
-    mark l
+    normal! ml
     silent! call visualmarkers#HlMarkBuffer()
     silent! call visualmarkers#FakeBufferCursor()
 endfunction
