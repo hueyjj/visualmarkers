@@ -2,8 +2,24 @@
 "    let b:hl_toggle_markers = 0
 "endif
 
+function! visualmarkers#LoadHighlights()
+    highlight Buffer_Mark      ctermfg=Black ctermbg=Yellow guifg=Black guibg=Yellow
+    highlight A_Mark           ctermfg=Black ctermbg=Green guifg=Black guibg=Green
+    highlight B_Mark           ctermfg=Black ctermbg=White guifg=Black guibg=White
+    highlight C_Mark           ctermfg=Black ctermbg=DarkMagenta guifg=Black guibg=DarkMagenta
+    
+    hi! link visualmarkersHighlights Buffer_Mark
+    hi! link visualmarkersHighlights A_Mark
+    hi! link visualmarkersHighlights B_Mark
+    hi! link visualmarkersHighlights C_Mark
+endfunction
+
 "Hack to spawn marker when on an end of line character
 function! visualmarkers#SpawnMarker()
+    if !hlexists("a:visualmarkersHighlights")
+        call visualmarkers#LoadHighlights()
+    endif
+
     if col(".") == col("$")
         let last_pos = getpos(".")
         normal! k
