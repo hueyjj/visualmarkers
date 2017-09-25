@@ -3,6 +3,8 @@ visualmarkers
 
 visualmarkers is a small vim script plugin that highlights vim's built-in marker positions.
 
+![Markers screenshot](https://raw.githubusercontent.com/hueyjj/visualmarkers/master/screenshots/markers.PNG)
+
 Download
 =======
 
