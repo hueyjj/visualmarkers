@@ -1,3 +1,7 @@
+if exists("g:visualmarkers_loaded")
+    finish
+endif
+
 "Highlight markers
 highlight! Buffer_Mark   ctermfg=Black ctermbg=Yellow guifg=Black guibg=Yellow
 highlight! A_Mark        ctermfg=Black ctermbg=Green guifg=Black guibg=Green
@@ -71,12 +75,22 @@ function! visualmarkers#HlMarkC()
 endfunction
 
 function! visualmarkers#UnHlMarkBuffer()
-    "Remove dummy white space for cursor
-    if col(".") == 1 && matchstr(getline("."), "\ ") != ""
-        \ && col(".") + 1 == col("$") 
-        "call setline(line("."), "")
-        "Safer to delete one character than an entire line...?
+
+    "Remove dummy white space for cursor.
+    "Conditions to remove dummy white space:
+    "   1. The cursor must be on the first column.
+    "   2. The line must contain only one character and it must be a white space.
+    "   3. The second (last) column must be the end of line.
+    "When conditions are met, this script should/will remove that one character, a dummy white space that
+    "   was placed before switching buffers.
+    let line = getline(".")
+    let col_num = col(".")
+    if col_num == 1
+        \ && strlen(line) <= 1 && matchstr(line, "\ ") != ""
+        \ && col_num + 1 == col("$") 
+        "Safer to delete one character than an entire line
         normal! x
+        "call setline(line("."), "")
     endif
     let buffer_delete = matchdelete(b:hl_mark_buffer_id)
     delmarks l
@@ -127,13 +141,16 @@ endfunction
 
 function! visualmarkers#MarkBuffer()
     silent! call visualmarkers#UnHlMarkBuffer()
-    normal! ml
-    call visualmarkers#HlMarkBuffer()
-    call visualmarkers#FakeBufferCursor()
+    "normal! ml
+    mark l
+    silent! call visualmarkers#HlMarkBuffer()
+    silent! call visualmarkers#FakeBufferCursor()
 endfunction
 
-command! MeHlMarkAll call visualmarkers#HlMarkAll()
-command! MeUnHlMarkAll call visualmarkers#UnHlMarkAll()
+command! MeHlMarkAll silent! call visualmarkers#HlMarkAll()
+command! MeUnHlMarkAll silent! call visualmarkers#UnHlMarkAll()
 
 autocmd BufLeave * silent! call visualmarkers#MarkBuffer()
 autocmd BufEnter * silent! call visualmarkers#UnHlMarkBuffer()
+
+let g:visualmarkers_loaded = 1
