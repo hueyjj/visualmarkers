@@ -2,6 +2,15 @@
 "    let b:hl_toggle_markers = 0
 "endif
 
+if !exists("g:visualmarker_buffer_mark")
+    let g:visualmarker_buffer_mark = "l"    "Default
+endif
+
+let s:del_buffer_mark = "delmarks " . g:visualmarker_buffer_mark
+
+function! visualmarkers#SetHighlights(user_highlights)
+endfunction
+
 function! visualmarkers#LoadHighlights()
     highlight Buffer_Mark     ctermfg=Black ctermbg=Brown   guifg=Black guibg=Brown
     highlight A_Mark          ctermfg=Black ctermbg=Cyan    guifg=Black guibg=#137b7a
@@ -41,20 +50,13 @@ function! visualmarkers#SpawnMarker()
             endif
         endif
    endif
-endfunction
 
-"Vim redraws the screen when switching buffers. Must create a dummy white space 
-"as a placeholder.
-"function! visualmarkers#FakeBufferCursor()
-"    if col(".") == col("$")
-"        call setline(line("."), " ")
-"        write
-"    endif
-"endfunction
+   redraw
+endfunction
 
 function! visualmarkers#HlMarkBuffer() 
     let b:hl_toggle_markers = 1
-    let b:hl_mark_buffer_id = matchadd("Buffer_Mark", "\\%'l")
+    let b:hl_mark_buffer_id = matchadd("Buffer_Mark", "\\%'" . g:visualmarker_buffer_mark)
     call visualmarkers#SpawnMarker()
 endfunction
 
@@ -80,26 +82,7 @@ function! visualmarkers#HlMarkC()
 endfunction
 
 function! visualmarkers#UnHlMarkBuffer()
-
-    "Remove dummy white space for cursor.
-    "Conditions to remove dummy white space:
-    "   1. The cursor must be on the first column.
-    "   2. The line must contain only one character and it must be a white space.
-    "   3. The second (last) column must be the end of line.
-    "When conditions are met, this script should/will remove that one character, a dummy white space that
-    "   was placed before switching buffers.
-    "let line = getline(".")
-    "let col_num = col(".")
-    "if col_num == 1
-    "    \ && strlen(line) <= 1 && matchstr(line, "\ ") != ""
-    "    \ && col_num + 1 == col("$") 
-    "    "Safer to delete one character than an entire line
-    "    normal! x
-    "    "call setline(line("."), "")
-    "endif
-    normal! ``
     let buffer_delete = matchdelete(b:hl_mark_buffer_id)
-    delmarks `
 endfunction
 
 function! visualmarkers#UnHlMarkA()
@@ -147,6 +130,13 @@ endfunction
 
 function! visualmarkers#MarkBuffer()
     silent! call visualmarkers#UnHlMarkBuffer()
-    normal! m`
+    execute s:del_buffer_mark
+    execute "normal! m" . g:visualmarker_buffer_mark
     silent! call visualmarkers#HlMarkBuffer()
+endfunction
+
+function! visualmarkers#ReturnToLastLocation()
+    execute "normal! `" . g:visualmarker_buffer_mark
+    silent! call visualmarkers#UnHlMarkBuffer()
+    execute s:del_buffer_mark
 endfunction
