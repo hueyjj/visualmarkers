@@ -1,7 +1,3 @@
-"if !exists("b:hl_toggle_markers")
-"    let b:hl_toggle_markers = 0
-"endif
-
 if !exists("g:visualmarker_buffer_mark")
     let g:visualmarker_buffer_mark = "l"    "Default
 endif
@@ -61,6 +57,10 @@ function! visualmarkers#HlMarkBuffer()
 endfunction
 
 function! visualmarkers#HlMarkA() 
+    if b:hl_mark_a > 0
+        visualmarkers#UnHlMarkA()
+    endif
+
     silent! call visualmarkers#UnHlMarkA()
     let b:hl_toggle_markers = 1
     let b:hl_mark_a = matchadd("A_Mark", "\\%'a")
@@ -68,6 +68,10 @@ function! visualmarkers#HlMarkA()
 endfunction
 
 function! visualmarkers#HlMarkB()
+    if b:hl_mark_a > 0
+        visualmarkers#UnHlMarkA()
+    endif
+
     silent! call visualmarkers#UnHlMarkB()
     let b:hl_toggle_markers = 1
     let b:hl_mark_b = matchadd("B_Mark", "\\%'b")
@@ -75,7 +79,11 @@ function! visualmarkers#HlMarkB()
 endfunction
  
 function! visualmarkers#HlMarkC()
-    silent! call visualmarkers#UnHlMarkC()
+    if b:hl_mark_a > 0
+        visualmarkers#UnHlMarkA()
+    endif
+
+   silent! call visualmarkers#UnHlMarkC()
     let b:hl_toggle_markers = 1
     let b:hl_mark_c = matchadd("C_Mark", "\\%'c")
     call visualmarkers#SpawnMarker()
