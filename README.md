@@ -1,7 +1,7 @@
 visualmarks
 ======
 
-visualmarks is a small vim script plugin that highlights vim's built-in marker positions.
+visualmarks is a small vim script plugin that highlights vim's built-in marks.
 
 ![Markers screenshot](https://raw.githubusercontent.com/hueyjj/visualmarks/master/screenshots/markers.PNG)
 
@@ -43,7 +43,7 @@ After adding visualmarker to vim's runtimepath, add these.
         \["e",      "black", "red",     "black", "red"],
     \])
 
-    "Remap marks to itself plus a function a call to highlight.
+    "Remap marks to itself plus a function call to highlight.
     "Make sure the mark command match the argument that is passed into the function.
     nnoremap <silent> ma ma:call visualmarks#HighlightMark("a")<CR>
     nnoremap <silent> mb mb:call visualmarks#HighlightMark("b")<CR>
@@ -52,6 +52,7 @@ After adding visualmarker to vim's runtimepath, add these.
     nnoremap <silent> me me:call visualmarks#HighlightMark("e")<CR>
 
     "Show or hide the highlights
+
     nnoremap <Leader>z :call visualmarks#ToggleHlMarkers()<CR>
 
 The visualmarks functions should be called after using a mark. While there
@@ -59,7 +60,7 @@ are at least 26 (alphabets) + 10 (digits) marks available, the example only uses
 Ideally, it is up to the user to add their preferred marks in their vimrc.
 Colors are also customizable.
 
-Main cases
+Usage
 =======
 1) While in normal mode, using ma, mb, mc, etc. (setting marks), should place a mark down. The marks should
 immediately show the highlights.
@@ -67,10 +68,11 @@ immediately show the highlights.
 2) When switching buffers and all buffers are visible, a mark will be placed at the cursor's previous position. That
 mark should immediately show its highlight. Switching back to the buffer that has the mark will remove that highlight and mark.
 
-3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through the command
+3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through the commands
+
+
     :VisualmarksHighlight
 
-    :VisualmarksUnhighlight. 
+    :VisualmarksUnhighlight
 
 If there are marks down, the highlights should also become visible when toggled again.
-
