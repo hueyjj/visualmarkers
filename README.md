@@ -68,11 +68,9 @@ immediately show the highlights.
 2) When switching buffers and all buffers are visible, a mark will be placed at the cursor's previous position. That
 mark should immediately show its highlight. Switching back to the buffer that has the mark will remove that highlight and mark.
 
-3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through the commands
-
+3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through commands:
 
     :VisualmarksHighlight
-
     :VisualmarksUnhighlight
 
 If there are marks down, the highlights should also become visible when toggled again.
