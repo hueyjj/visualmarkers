@@ -70,6 +70,7 @@ mark should immediately show its highlight. Switching back to the buffer that ha
 
 3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through commands:
 
+
     :VisualmarksHighlight
     :VisualmarksUnhighlight
 
