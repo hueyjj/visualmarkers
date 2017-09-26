@@ -97,9 +97,9 @@ function! visualmarkers#UnHlMarkBuffer()
     "    normal! x
     "    "call setline(line("."), "")
     "endif
-    normal! `l
+    normal! ``
     let buffer_delete = matchdelete(b:hl_mark_buffer_id)
-    delmarks l
+    delmarks `
 endfunction
 
 function! visualmarkers#UnHlMarkA()
@@ -147,6 +147,6 @@ endfunction
 
 function! visualmarkers#MarkBuffer()
     silent! call visualmarkers#UnHlMarkBuffer()
-    normal! ml
+    normal! m`
     silent! call visualmarkers#HlMarkBuffer()
 endfunction
