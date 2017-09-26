@@ -53,7 +53,6 @@ nnoremap <silent> md md:call visualmarks#HighlightMark("d")<CR>
 nnoremap <silent> me me:call visualmarks#HighlightMark("e")<CR>
 
 "Show or hide the highlights
-
 nnoremap <Leader>z :call visualmarks#ToggleHlMarkers()<CR>
 ```
 
