@@ -27,6 +27,7 @@ In the vimrc
 ======
 After adding visualmarker to vim's runtimepath, add these.
 
+```vimscript
     "Highlight markers
     let g:visualmarks_buffer_mark = 'l' "change if user uses 'l' to mark
 
@@ -54,6 +55,7 @@ After adding visualmarker to vim's runtimepath, add these.
     "Show or hide the highlights
 
     nnoremap <Leader>z :call visualmarks#ToggleHlMarkers()<CR>
+```
 
 The visualmarks functions should be called after using a mark. While there
 are at least 26 (alphabets) + 10 (digits) marks available, the example only uses a few markers.
@@ -70,8 +72,9 @@ mark should immediately show its highlight. Switching back to the buffer that ha
 
 3) When it becomes necessary, the highlights can all be hidden through the ToggleHlMarkers function or through commands:
 
-
-    :VisualmarksHighlight
-    :VisualmarksUnhighlight
+```vimscript
+:VisualmarksHighlight
+:VisualmarksUnhighlight
+```
 
 If there are marks down, the highlights should also become visible when toggled again.
