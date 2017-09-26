@@ -3,17 +3,17 @@
 "endif
 
 function! visualmarkers#LoadHighlights()
-    highlight Buffer_Mark      ctermfg=Black ctermbg=Yellow guifg=Black guibg=Yellow
-    highlight A_Mark           ctermfg=Black ctermbg=Green guifg=Black guibg=Green
-    highlight B_Mark           ctermfg=Black ctermbg=White guifg=Black guibg=White
-    highlight C_Mark           ctermfg=Black ctermbg=DarkMagenta guifg=Black guibg=DarkMagenta
+    highlight Buffer_Mark     ctermfg=Black ctermbg=Brown   guifg=Black guibg=Brown
+    highlight A_Mark          ctermfg=Black ctermbg=Cyan    guifg=Black guibg=#137b7a
+    highlight B_Mark          ctermfg=Black ctermbg=Yellow  guifg=Black guibg=#ffa500
+    highlight C_Mark          ctermfg=Black ctermbg=Red     guifg=Black guibg=Red
     
     hi! link visualmarkersHighlights Buffer_Mark
     hi! link visualmarkersHighlights A_Mark
     hi! link visualmarkersHighlights B_Mark
     hi! link visualmarkersHighlights C_Mark
 endfunction
-
+ 
 "Hack to spawn marker when on an end of line character
 function! visualmarkers#SpawnMarker()
     if !hlexists("a:visualmarkersHighlights")
@@ -29,29 +29,28 @@ function! visualmarkers#SpawnMarker()
         "So when cursor position changes, redraw to show mark.
         if last_pos[1] != curr_pos[1] 
             redraw
+            "normal! j
+        else
+            let last_pos = curr_pos
             normal! j
-            return 0
-        endif
+            let curr_pos = getpos(".")
 
-        let last_pos = curr_pos
-        normal! j
-        let curr_pos = getpos(".")
-
-        if last_pos[1] != curr_pos[1]
-            redraw
-            normal! k
-            return 0
+            if last_pos[1] != curr_pos[1]
+                redraw
+                "normal! k
+            endif
         endif
-    endif
+   endif
 endfunction
 
 "Vim redraws the screen when switching buffers. Must create a dummy white space 
 "as a placeholder.
-function! visualmarkers#FakeBufferCursor()
-    if col(".") == col("$")
-        call setline(line("."), " ")
-    endif
-endfunction
+"function! visualmarkers#FakeBufferCursor()
+"    if col(".") == col("$")
+"        call setline(line("."), " ")
+"        write
+"    endif
+"endfunction
 
 function! visualmarkers#HlMarkBuffer() 
     let b:hl_toggle_markers = 1
@@ -72,7 +71,7 @@ function! visualmarkers#HlMarkB()
     let b:hl_mark_b = matchadd("B_Mark", "\\%'b")
     call visualmarkers#SpawnMarker()
 endfunction
-
+ 
 function! visualmarkers#HlMarkC()
     silent! call visualmarkers#UnHlMarkC()
     let b:hl_toggle_markers = 1
@@ -89,15 +88,16 @@ function! visualmarkers#UnHlMarkBuffer()
     "   3. The second (last) column must be the end of line.
     "When conditions are met, this script should/will remove that one character, a dummy white space that
     "   was placed before switching buffers.
-    let line = getline(".")
-    let col_num = col(".")
-    if col_num == 1
-        \ && strlen(line) <= 1 && matchstr(line, "\ ") != ""
-        \ && col_num + 1 == col("$") 
-        "Safer to delete one character than an entire line
-        normal! x
-        "call setline(line("."), "")
-    endif
+    "let line = getline(".")
+    "let col_num = col(".")
+    "if col_num == 1
+    "    \ && strlen(line) <= 1 && matchstr(line, "\ ") != ""
+    "    \ && col_num + 1 == col("$") 
+    "    "Safer to delete one character than an entire line
+    "    normal! x
+    "    "call setline(line("."), "")
+    "endif
+    normal! `l
     let buffer_delete = matchdelete(b:hl_mark_buffer_id)
     delmarks l
 endfunction
@@ -149,5 +149,4 @@ function! visualmarkers#MarkBuffer()
     silent! call visualmarkers#UnHlMarkBuffer()
     normal! ml
     silent! call visualmarkers#HlMarkBuffer()
-    silent! call visualmarkers#FakeBufferCursor()
 endfunction
